@@ -38,6 +38,7 @@ int main(){
     clientadd.sin_port = htons(port);
     if(connect(clientsocket, (SOCKADDR*)&clientadd, sizeof(clientadd)) == SOCKET_ERROR){
         cout << "Connect failed" << endl;
+        closesocket(clientsocket);
         WSACleanup();
         return 0;
     }
@@ -48,8 +49,8 @@ int main(){
     //send
     char sendbuf[4096];
     cin.getline(sendbuf, 4096);
-    int sendlenght = send(clientsocket, sendbuf, 4096, 0);
-    if(sendlenght < 0){
+    int sendlength = send(clientsocket, sendbuf, 4096, 0);
+    if(sendlength == SOCKET_ERROR){
         cout << "Send failed" << endl;
         closesocket(clientsocket);
         WSACleanup();
