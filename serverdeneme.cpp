@@ -7,6 +7,42 @@
 
 using namespace std;
 
+void receiveserver(SOCKET newsocket){
+    char receivebuf[4096];
+    while(true){
+    memset(receivebuf, 0, sizeof(receivebuf));
+
+    int receivelength = recv(newsocket, receivebuf, 4096, 0);
+    if(receivelength < 0){
+        cout << "Receive failed" << endl;
+        closesocket(newsocket);
+        WSACleanup();
+        break;
+    }
+    else{
+        cout << "Received: " << receivebuf << endl;
+    }
+    }
+}
+void sendserver(SOCKET newsocket){
+    char sendbuf[4096];
+    while(true){
+    memset(sendbuf, 0, sizeof(sendbuf));
+
+    cin.getline(sendbuf, 4096);
+    int sendlength = send(newsocket, sendbuf, 4096, 0);
+    if(sendlength == SOCKET_ERROR){
+        cout << "Send failed" << endl;
+        closesocket(newsocket);
+        WSACleanup();
+        break;
+    }
+    else{
+        cout << "Send OK " << endl;
+    }
+    }
+}
+
 int main(){
 
     //Initialize Winsock
@@ -65,43 +101,6 @@ int main(){
         cout << "New socket and accept failed" << endl;
         WSACleanup();
         return -1;
-    }
-
-    char receivebuf[4096];
-    char sendbuf[4096];
-    //receive
-    while(true){
-
-    memset(sendbuf, 0, sizeof(sendbuf));
-    memset(receivebuf, 0, sizeof(receivebuf));
-
-    int receivelength = recv(newsocket, receivebuf, 4096, 0);
-    if(receivelength < 0){
-        cout << "Receive failed" << endl;
-        closesocket(originalsocket);
-        closesocket(newsocket);
-        WSACleanup();
-        return 0;
-        break;
-    }
-    else{
-        cout << "Received: " << receivebuf << endl;
-    }
-
-    //send
-    cin.getline(sendbuf, 4096);
-    int sendlength = send(newsocket, sendbuf, 4096, 0);
-    if(sendlength == SOCKET_ERROR){
-        cout << "Send failed" << endl;
-        closesocket(originalsocket);
-        closesocket(newsocket);
-        WSACleanup();
-        return -1;
-        break;
-    }
-    else{
-        cout << "Send OK " << endl;
-    }
     }
 
     system("pause");
