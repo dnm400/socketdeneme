@@ -61,7 +61,7 @@ int main(){
 
     //receive
     char recbuf[4096];
-    int reclength = send(clientsocket, recbuf, 4096, 0);
+    int reclength = recv(clientsocket, recbuf, 4096, 0);
     if(reclength < 0){
         cout << "Receive failed" << endl;
         closesocket(clientsocket);
