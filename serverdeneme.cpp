@@ -1,6 +1,7 @@
 #include <iostream>
 #include <winsock2.h>
 #include <ws2tcpip.h> //for inet_pton
+#include <tchar.h> //for _T
 
 
 using namespace std;
@@ -33,7 +34,7 @@ int main(){
     sockaddr_in addvar;
     addvar.sin_family = AF_INET;
     addvar.sin_port = htons(port);
-    inet_pton(AF_INET, _T("127.0.0.1"), &addvar.sin_addr.s_addr); //AGAIN
+    InetPton(AF_INET, _T("127.0.0.1"), &addvar.sin_addr.s_addr);
     if(bind(originalsocket, (SOCKADDR*)&addvar, sizeof(addvar)) == SOCKET_ERROR){
         cout << "Bind failed" << endl;
         closesocket(originalsocket);
@@ -44,7 +45,17 @@ int main(){
         cout << "Bind OK" << endl;
     }
 
-    
+    //listen 
+    if(listen(originalsocket, 2) == SOCKET_ERROR){
+        cout << "Listen failed" << endl;
+        closesocket(originalsocket);
+        WSACleanup();
+        return 1;
+
+    }
+    else{
+        cout << "Listen OK" << endl;
+    }
 
     WSACleanup();
     return 0;
