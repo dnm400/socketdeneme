@@ -2,8 +2,8 @@
 #include <winsock2.h>
 #include <ws2tcpip.h> //for inet_pton
 #include <tchar.h> //for _T
-#include <vector> //more clients
 
+#pragma comment(lib, "Ws2_32.lib")
 
 using namespace std;
 
@@ -47,7 +47,7 @@ int main(){
     }
 
     //listen 
-    if(listen(originalsocket, 2) == SOCKET_ERROR){ //2 -> max # of connection allowed
+    if(listen(originalsocket, 1) == SOCKET_ERROR){
         cout << "Listen failed" << endl;
         closesocket(originalsocket);
         WSACleanup();
@@ -60,7 +60,6 @@ int main(){
     
     char receivebuf[4096];
 
-   // while(1){
     //accept
     SOCKET newsocket = accept(originalsocket, NULL, NULL);
     if(newsocket == INVALID_SOCKET){
@@ -68,29 +67,40 @@ int main(){
         WSACleanup();
         return -1;
     }
-   // vector<SOCKET> clients;
-   // clients.push_back(newsocket);
-    // }
 
     //receive
     char receivebuf[4096];
-    int bytelength = recv(newsocket, receivebuf, 4096, 0); //AGAIN
-    if(bytelength < 0){
-        cout << "Disconnected" << endl;
+    int receivelength = recv(newsocket, receivebuf, 4096, 0);
+    if(receivelength < 0){
+        cout << "Receive failed" << endl;
+        closesocket(originalsocket);
+        closesocket(newsocket);
         WSACleanup();
+        return 0;
     }
     else{
-        cout << receivebuf << endl;
+        cout << "Received: " << receivebuf << endl;
     }
 
-    //send-check that if it is necessary or not for chat application
-    char announcement[4096] = "Receive message OK";
-    bytelength = send(newsocket, announcement, 4096, 0);
-    cout << announcement << endl;
+    //send
+    char sendbuf[4096];
+    cin.getline(sendbuf, 4096);
+    int sendlength = send(newsocket, sendbuf, 4096, 0);
+    if(sendlength == SOCKET_ERROR){
+        cout << "Send failed" << endl;
+        closesocket(originalsocket);
+        closesocket(newsocket);
+        WSACleanup();
+        return -1;
+    }
+    else{
+        cout << "Send OK " << endl;
+    }
 
 
     system("pause");
     closesocket(originalsocket);
+    closesocket(newsocket);
     WSACleanup();
     return 0;
 }
