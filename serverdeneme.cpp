@@ -24,7 +24,7 @@ int main(){
     if(originalsocket == INVALID_SOCKET){
         cout << "Creating socket failed" << endl;
         WSACleanup();
-        return;
+        return 0;
     }
     else {
         cout << "Creating socket OK" << endl;
@@ -57,8 +57,7 @@ int main(){
     else{
         cout << "Listen OK" << endl;
     }
-    
-    char receivebuf[4096];
+
 
     //accept
     SOCKET newsocket = accept(originalsocket, NULL, NULL);
