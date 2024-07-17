@@ -7,6 +7,25 @@
 
 using namespace std;
 
+void sendmsg(SOCKET clientsocket){
+    char sendbuf[4096];
+    while(true){
+    memset(sendbuf, 0, sizeof(sendbuf));
+
+    cin.getline(sendbuf, 4096);
+    int sendlength = send(clientsocket, sendbuf, 4096, 0);
+    if(sendlength == SOCKET_ERROR){
+        cout << "Send failed" << endl;
+        closesocket(clientsocket);
+        WSACleanup();
+        break;
+    }
+    else{
+        cout << "Send OK " << endl;
+    }
+    }
+}
+
 int main(){
 
     //Initialize Winsock
@@ -47,26 +66,10 @@ int main(){
     }
 
 
-    char sendbuf[4096];
+
     char recbuf[4096];
     while(true){
-    //send
-
-    memset(sendbuf, 0, sizeof(sendbuf));
     memset(recbuf, 0, sizeof(recbuf));
-
-    cin.getline(sendbuf, 4096);
-    int sendlength = send(clientsocket, sendbuf, 4096, 0);
-    if(sendlength == SOCKET_ERROR){
-        cout << "Send failed" << endl;
-        closesocket(clientsocket);
-        WSACleanup();
-        return 0;
-        break;
-    }
-    else{
-        cout << "Send OK " << endl;
-    }
 
     //receive
     int reclength = recv(clientsocket, recbuf, 4096, 0);
