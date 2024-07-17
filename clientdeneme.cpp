@@ -46,8 +46,15 @@ int main(){
         cout << "Connect OK" << endl;
     }
 
-    //send
+
     char sendbuf[4096];
+    char recbuf[4096];
+    while(true){
+    //send
+
+    memset(sendbuf, 0, sizeof(sendbuf));
+    memset(recbuf, 0, sizeof(recbuf));
+
     cin.getline(sendbuf, 4096);
     int sendlength = send(clientsocket, sendbuf, 4096, 0);
     if(sendlength == SOCKET_ERROR){
@@ -55,22 +62,24 @@ int main(){
         closesocket(clientsocket);
         WSACleanup();
         return 0;
+        break;
     }
     else{
         cout << "Send OK " << endl;
     }
 
     //receive
-    char recbuf[4096];
     int reclength = recv(clientsocket, recbuf, 4096, 0);
     if(reclength < 0){
         cout << "Receive failed" << endl;
         closesocket(clientsocket);
         WSACleanup();
         return 0;
+        break;
     }
     else{
         cout << "Received: " << recbuf << endl;
+    }
     }
 
 
