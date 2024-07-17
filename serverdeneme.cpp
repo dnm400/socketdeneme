@@ -15,7 +15,7 @@ int main(){
     int resdll = WSAStartup(MAKEWORD(2,2), &wsaData);
     if(resdll != 0){
         cout << "WSAStartup failed" << endl;
-        return -1;
+        return 0;
     }
 
     //Create a socket
@@ -24,7 +24,7 @@ int main(){
     if(originalsocket == INVALID_SOCKET){
         cout << "Creating socket failed" << endl;
         WSACleanup();
-        return -1;
+        return;
     }
     else {
         cout << "Creating socket OK" << endl;
@@ -51,7 +51,7 @@ int main(){
         cout << "Listen failed" << endl;
         closesocket(originalsocket);
         WSACleanup();
-        return -1;
+        return 0;
 
     }
     else{
@@ -59,17 +59,19 @@ int main(){
     }
 
     //accept
-    SOCKET newsocket;
-    newsocket = accept(originalsocket, NULL, NULL);
+    SOCKET newsocket = accept(originalsocket, NULL, NULL);
     if(newsocket == INVALID_SOCKET){
-        cout << "New socket failed" << endl;
+        cout << "New socket and accept failed" << endl;
         WSACleanup();
         return -1;
         
     }
+    else{
+        cout << "Accept OK" << endl;
+    }
 
 
-
+    system("pause");
     WSACleanup();
     return 0;
 }
