@@ -57,6 +57,8 @@ int main(){
     else{
         cout << "Listen OK" << endl;
     }
+    
+    char receivebuf[4096];
 
    // while(1){
     //accept
@@ -75,11 +77,17 @@ int main(){
     int bytelength = recv(newsocket, receivebuf, 4096, 0); //AGAIN
     if(bytelength < 0){
         cout << "Disconnected" << endl;
+        WSACleanup();
     }
     else{
-        string chat = string(receivebuf, bytelength);
-        cout << chat << endl;
+        cout << receivebuf << endl;
     }
+
+    //send-check that if it is necessary or not for chat application
+    char announcement[4096] = "Receive message OK";
+    bytelength = send(newsocket, announcement, 4096, 0);
+    cout << announcement << endl;
+
 
     system("pause");
     closesocket(originalsocket);
