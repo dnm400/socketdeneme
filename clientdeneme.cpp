@@ -26,6 +26,24 @@ void sendmsg(SOCKET clientsocket){
     }
 }
 
+void recmsg(SOCKET clientsocket){
+    char recbuf[4096];
+    while(true){
+    memset(recbuf, 0, sizeof(recbuf));
+
+    int reclength = recv(clientsocket, recbuf, 4096, 0);
+    if(reclength < 0){
+        cout << "Receive failed" << endl;
+        closesocket(clientsocket);
+        WSACleanup();
+        break;
+    }
+    else{
+        cout << "Received: " << recbuf << endl;
+    }
+    }
+}
+
 int main(){
 
     //Initialize Winsock
@@ -66,24 +84,6 @@ int main(){
     }
 
 
-
-    char recbuf[4096];
-    while(true){
-    memset(recbuf, 0, sizeof(recbuf));
-
-    //receive
-    int reclength = recv(clientsocket, recbuf, 4096, 0);
-    if(reclength < 0){
-        cout << "Receive failed" << endl;
-        closesocket(clientsocket);
-        WSACleanup();
-        return 0;
-        break;
-    }
-    else{
-        cout << "Received: " << recbuf << endl;
-    }
-    }
 
 
     system("pause");    
