@@ -2,6 +2,7 @@
 #include <winsock2.h>
 #include <ws2tcpip.h> //for inet_pton
 #include <tchar.h> //for _T
+#include <thread>
 
 #pragma comment(lib, "Ws2_32.lib")
 
@@ -102,6 +103,12 @@ int main(){
         WSACleanup();
         return -1;
     }
+
+    thread recT(receiveserver, newsocket); //for simultaneous chat,not one by one
+    thread sendT(sendserver, newsocket);
+    sendT.join();
+    recT.join();
+
 
     system("pause");
     closesocket(originalsocket);
