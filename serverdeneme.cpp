@@ -58,7 +58,7 @@ int main(){
         cout << "Listen OK" << endl;
     }
 
-    while(1){
+   // while(1){
     //accept
     SOCKET newsocket = accept(originalsocket, NULL, NULL);
     if(newsocket == INVALID_SOCKET){
@@ -66,8 +66,19 @@ int main(){
         WSACleanup();
         return -1;
     }
-    vector<SOCKET> clients;
-    clients.push_back(newsocket);
+   // vector<SOCKET> clients;
+   // clients.push_back(newsocket);
+    // }
+
+    //receive
+    char receivebuf[4096];
+    int bytelength = recv(newsocket, receivebuf, 4096, 0); //AGAIN
+    if(bytelength < 0){
+        cout << "Disconnected" << endl;
+    }
+    else{
+        string chat = string(receivebuf, bytelength);
+        cout << chat << endl;
     }
 
     system("pause");
