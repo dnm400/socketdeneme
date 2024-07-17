@@ -58,20 +58,20 @@ int main(){
         cout << "Listen OK" << endl;
     }
 
+    while(1){
     //accept
     SOCKET newsocket = accept(originalsocket, NULL, NULL);
     if(newsocket == INVALID_SOCKET){
         cout << "New socket and accept failed" << endl;
         WSACleanup();
         return -1;
-        
     }
-    else{
-        cout << "Accept OK" << endl;
+    vector<SOCKET> clients;
+    clients.push_back(newsocket);
     }
-
 
     system("pause");
+    closesocket(originalsocket);
     WSACleanup();
     return 0;
 }
